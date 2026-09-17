@@ -82,6 +82,14 @@ async function signup(req, res) {
         //data fetch from request body
         const {firstName, lastName, email, phone, createPassword, confirmPassword} = req.body;
 
+        //validate all the fields
+        if(!firstName || !lastName || !email || !phone || !createPassword || !confirmPassword) {
+            return res.status(400).json({
+                success: false,
+                message: "Please fill all the fields!"
+            })
+        }
+
         //check existing email
         let emailExists = await User.findOne(email);
         if(emailExists) {
