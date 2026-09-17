@@ -28,21 +28,21 @@ async function sendVerificationMail(email, otp) {
     }
 }
 
-// otpSchema.pre("save", async function(next) {
-//     await sendVerificationMail(this.email, this.otp);
-//     next();
-// })
+otpSchema.pre("save", async function(next) {
+    await sendVerificationMail(this.email, this.otp);
+    next();
+})
 
 //this will also work, just to save another function! Have to verify still!
-otpSchema.pre("save", async function(next) {
-    try{
-        const mailResponse = await sendMail(this.email, "Verification Email from EdTech", this.otp);
-        console.log("Email sent successfully!", mailResponse);
-        next();
-    } catch(err){
-        console.log("Error while sending verification mail", err);
-        throw err;
-    }
-})
+// otpSchema.pre("save", async function(next) {
+//     try{
+//         const mailResponse = await sendMail(this.email, "Verification Email from EdTech", this.otp);
+//         console.log("Email sent successfully!", mailResponse);
+//         next();
+//     } catch(err){
+//         console.log("Error while sending verification mail", err);
+//         throw err;
+//     }
+// })
 
 module.exports = mongoose.model("OTP", otpSchema);
