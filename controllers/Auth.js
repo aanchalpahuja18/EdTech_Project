@@ -79,8 +79,10 @@ async function sendOTP(req, res) {
 
 async function signup(req, res) {
     try {
+        //data fetch from request body
         const {firstName, lastName, email, phone, createPassword, confirmPassword} = req.body;
 
+        //check existing email
         let emailExists = await User.findOne(email);
         if(emailExists) {
             return res.status(400).json({
@@ -89,6 +91,7 @@ async function signup(req, res) {
             })
         }
         
+        //match both the passwords
         if(createPassword !== confirmPassword) {
             return res.status(500).json({
                 success: false,
@@ -96,6 +99,8 @@ async function signup(req, res) {
             })
         }
 
+
+        //find the otp
         // const otp = sendOTP(req, res);
         const otp = await OTP.find({email, otp});
 
@@ -103,7 +108,7 @@ async function signup(req, res) {
 
         const enteredOtp = req.body;
 
-
+        //validate otp
         if(otp !== enteredOtp) {
             return res.status(500).json({
                 success: false,
@@ -111,6 +116,7 @@ async function signup(req, res) {
             })
         }
 
+        //hash password
         let hashedPassword;
         try{
             hashedPassword = bcrypt.hash(confirmPassword, 10);
@@ -122,6 +128,7 @@ async function signup(req, res) {
             })
         }
 
+        //create entry in DB
         const userData = {
             firstName,
             lastName,
@@ -132,6 +139,7 @@ async function signup(req, res) {
 
         const newUser = await User.create(userData)
 
+        //return response
         return res.status(200).json({
             success: true,
             message: "User registered successfully!"
