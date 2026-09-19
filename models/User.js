@@ -20,6 +20,10 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    confirmPassword: {
+        type: String,
+        required: true
+    },
     accountType: {
         type: String,
         enum: ["Admin", "Instructor", "Student"],
