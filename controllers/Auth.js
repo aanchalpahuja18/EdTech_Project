@@ -3,6 +3,9 @@ const OTP = require("../models/Otp");
 const otpGenerator = require("otp-generator")
 const bcrypt = require("bcrypt");
 const Profile = require("../models/Profile");
+const jwt = require("jsonwebtoken");
+
+require("dotenv").config();
 
 
 //sendOTP:
@@ -177,5 +180,62 @@ async function signup(req, res) {
 }
 
 
+//login flow:
+async function login(req, res) {
+    try{
+        //fetch email and password: 
+        const {email, password} = req.body;
 
-module.exports = {sendOTP, signup}
+        //validate: 
+        if(!email || !password) {
+            return res.status(403).json({
+                success: false,
+                message: "Please enter all the required fields!"
+            })
+        }
+
+        //check if email exists: 
+        const checkEmail = await User.find({email});
+
+        if(!checkEmail){
+            return res.status(400).json({
+                success: false,
+                message: "Please register yourself!"
+            })
+        }
+
+        //check if password matches:
+        const checkPassword = await User.find({email, password});
+
+        if(checkPassword !== password) {
+            return res.status(400).json({
+                success: false,
+                message: "Incorrect password"
+            })
+        }
+
+        const tokenPayload = {
+            email,
+            password
+        }
+
+        const jwtSecret = process.env.JWT_SECRET;
+
+        const token = jwt.sign(tokenPayload, jwtSecret, {expiresIn: "2h"} );
+
+        return res.status(200).json({
+            success: true,
+            message: "User is logged in"
+        })
+    } catch(err) {
+        console.log("Error", err);
+        return res.status(500).json({
+            success: false,
+            message: "Failure in logging in the user"
+        })
+    }
+}
+
+
+
+module.exports = {sendOTP, signup, login}
