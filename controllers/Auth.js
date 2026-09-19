@@ -2,6 +2,7 @@ const User = require("../models/User");
 const OTP = require("../models/Otp");
 const otpGenerator = require("otp-generator")
 const bcrypt = require("bcrypt");
+const Profile = require("../models/Profile");
 
 
 //sendOTP:
@@ -80,54 +81,57 @@ async function sendOTP(req, res) {
 async function signup(req, res) {
     try {
         //data fetch from request body
-        const {firstName, lastName, email, phone, createPassword, confirmPassword} = req.body;
+        const {firstName, lastName, accountType, email, contactNo, password, confirmPassword, otp} = req.body;
 
         //validate all the fields
-        if(!firstName || !lastName || !email || !phone || !createPassword || !confirmPassword) {
-            return res.status(400).json({
+        if(!firstName || !lastName || !email || !contactNo || !password || !confirmPassword || !otp) {
+            return res.status(403).json({
                 success: false,
                 message: "Please fill all the fields!"
             })
         }
 
+        //match both the passwords
+        if(password !== confirmPassword) {
+            return res.status(400).json({
+                success: false,
+                message: "Passwords do not match, please try again!"
+            })
+        }
+
         //check existing email
-        let emailExists = await User.findOne(email);
+        const emailExists = await User.findOne(email);
         if(emailExists) {
             return res.status(400).json({
                 success: false,
                 message: "User already exists!"
             })
         }
-        
-        //match both the passwords
-        if(createPassword !== confirmPassword) {
-            return res.status(500).json({
-                success: false,
-                message: "Passwords do not match"
-            })
-        }
 
 
         //find the otp
-        // const otp = sendOTP(req, res);
-        const otp = await OTP.find({email, otp});
+        const recentOtp = await OTP.find({email}).sort({createdAt: -1}).limit(1);
+        console.log("Recent OTP: ", recentOtp);
 
-        await sendVerificationMail(email, otp);
-
-        const enteredOtp = req.body;
-
-        //validate otp
-        if(otp !== enteredOtp) {
-            return res.status(500).json({
+        if(recentOtp.length === 0 ){
+            return res.status(400).json({
                 success: false,
-                message: "OTP does not match!"
+                message: "OTP not found!"
+            })
+        } else if(otp !== recentOtp.otp){
+            //Invalid OTP
+            return res.status(400).json({
+                success: false,
+                message: "OTP does not match, Please try again"
             })
         }
+
+        // await sendVerificationMail(email, otp);
 
         //hash password
         let hashedPassword;
         try{
-            hashedPassword = bcrypt.hash(confirmPassword, 10);
+            hashedPassword = await bcrypt.hash(confirmPassword, 10);
         }
         catch(err){
             return res.status(5090).json({
@@ -136,13 +140,22 @@ async function signup(req, res) {
             })
         }
 
+        const profileDetails = await Profile.create({
+            gender: null,
+            dateOfBirth: null,
+            about: null,
+            profession: null
+        })
         //create entry in DB
         const userData = {
             firstName,
             lastName,
             email,
-            phone,
-            password: hashedPassword
+            contactNo,
+            password: hashedPassword,
+            accountType,
+            additionalDetails: profileDetails._id,
+            image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`
         }
 
         const newUser = await User.create(userData)
@@ -150,7 +163,8 @@ async function signup(req, res) {
         //return response
         return res.status(200).json({
             success: true,
-            message: "User registered successfully!"
+            message: "User registered successfully!",
+            newUser
         })
 
     } catch (error) {
