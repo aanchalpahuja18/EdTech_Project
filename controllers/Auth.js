@@ -4,6 +4,7 @@ const otpGenerator = require("otp-generator")
 const bcrypt = require("bcrypt");
 const Profile = require("../models/Profile");
 const jwt = require("jsonwebtoken");
+const sendMail = require("../utils/mailSender");
 
 require("dotenv").config();
 
@@ -248,6 +249,71 @@ async function login(req, res) {
     }
 }
 
+//change password:
+async function changePassword(req, res) {
+    try{
+        //fetch data of user from req body:
+        const {email, password} = req.body;
+
+        //validate the data:
+        if(!email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: "Please enter required fields!"
+            })
+        };
+
+        //check if user exists in the system
+        const user = await User.findOne({email});
+        if(!user) {
+            return res.status(500).json({
+                success: false,
+                messsage: "User does not exist in our system!"
+            })
+        }
+
+        //fetch password: 
+        const {oldPassword, newPassword, confirmPassword} = req.body;
+
+        //validate the data:
+        if(!oldPassword || !newPassword || !confirmPassword) {
+            return res.status(400).json({
+                success: false,
+                message: "Please enter all the required fields!"
+            })
+        }
+
+        //check if newPassword and confirmPassword matches: 
+        if(newPassword !== confirmPassword) {
+            return res.status(403).json({
+                success: false,
+                message: "Passwords do not match!"
+            })
+        }
+
+        //update the entry in DB:
+        const updatePassword = await User.findByIdAndUpdate({_id: user.id, password: confirmPassword});
+
+        if(updatePassword) {
+           const response = await sendMail(email, "Password Updated Successfully!", `<p>Your password has been updated successfully!</p>`);
+
+           if(response) {
+            return res.status(200).json({
+                success: true,
+                message: "Password is changed successfully!"
+            })
+           }
+        }
+
+    } catch(err) {
+        console.log("Error in changing password!");
+        return res.status(500).json({
+            success: false,
+            message: "Error in changing password, please try again later!"
+        })
+    }
+}
 
 
-module.exports = {sendOTP, signup, login}
+
+module.exports = {sendOTP, signup, login, changePassword}
