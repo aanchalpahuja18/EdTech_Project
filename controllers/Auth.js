@@ -194,44 +194,56 @@ async function login(req, res) {
             })
         }
 
-        //check if email exists: 
-        const checkEmail = await User.find({email});
+        //check if email exists:    
+        const user = await User.findOne({email});
 
-        if(!checkEmail){
-            return res.status(400).json({
+        if(!user){
+            return res.status(401).json({
                 success: false,
                 message: "Please register yourself!"
             })
         }
 
         //check if password matches:
-        const checkPassword = await User.find({email, password});
-
-        if(checkPassword !== password) {
-            return res.status(400).json({
-                success: false,
-                message: "Incorrect password"
-            })
-        }
-
-        const tokenPayload = {
-            email,
-            password
-        }
 
         const jwtSecret = process.env.JWT_SECRET;
 
-        const token = jwt.sign(tokenPayload, jwtSecret, {expiresIn: "2h"} );
+        const checkPassword = await bcrypt.compare(user.password, password);
 
-        return res.status(200).json({
-            success: true,
-            message: "User is logged in"
-        })
+        if(checkPassword) {
+            const tokenPayload = {
+                email: user.email,
+                id: user._id,
+                role: user.accountType
+            };
+            const token = jwt.sign(tokenPayload, jwtSecret, {expiresIn: "2h"} );
+            user.token = token;
+            user.password = undefined;
+
+            
+            //create cookie and send response:
+            const options = {
+                expires: new Date(Date.now() + 3*24*60*60*1000),
+                httpOnly: true
+            }
+            return res.cookie("token", token, options).status(200).json({
+                success: true,
+                message: "User is logged in",
+                token,
+                user
+            })
+        }
+        else{
+            return res.status(401).json({
+                success: false,
+                message: "Password is incorrect!"
+            })
+        }
     } catch(err) {
         console.log("Error", err);
         return res.status(500).json({
             success: false,
-            message: "Failure in logging in the user"
+            message: "Login failure, please try again!"
         })
     }
 }
