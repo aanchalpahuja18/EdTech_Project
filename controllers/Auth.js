@@ -215,7 +215,7 @@ async function login(req, res) {
             const tokenPayload = {
                 email: user.email,
                 id: user._id,
-                role: user.accountType
+                accountType: user.accountType
             };
             const token = jwt.sign(tokenPayload, jwtSecret, {expiresIn: "2h"} );
             user.token = token;
