@@ -36,7 +36,7 @@ async function createCourse(req, res) {
             })
         }
 
-        //check given tag is valid or not
+        //check given category is valid or not
         const checkCategory = await Category.findById(category);
         if(!checkCategory){
             return res.status(404).json({
@@ -78,8 +78,8 @@ async function createCourse(req, res) {
         );
         console.log("Course added in User model: ", courseUser);
 
-        //update the tag schema
-        const courseTag = await Category.findByIdAndUpdate(
+        //update the category schema
+        const courseCategory = await Category.findByIdAndUpdate(
             {_id: checkCategory._id},
             {
                 $push: {
@@ -88,7 +88,7 @@ async function createCourse(req, res) {
             },
             {new: true}
         );
-        console.log("Course added in Tag model: ", courseTag);
+        console.log("Course added in Category model: ", courseCategory);
 
         return res.status(200).json({
             success: true,
