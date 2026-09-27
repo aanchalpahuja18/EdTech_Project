@@ -1,5 +1,5 @@
 const Course = require("../models/Course");
-const Tag = require("../models/Category");
+const Category = require("../models/Category");
 const User = require("../models/User");
 const uploadImageToCloudinary = require("../utils/imageUploader");
 
@@ -10,13 +10,13 @@ require("dotenv").config();
 async function createCourse(req, res) {
     try{
         //fetch data:
-        const {courseName, courseDescription, whatYouWillLearn, price, tag} = req.body;
+        const {courseName, courseDescription, whatYouWillLearn, price, category, tag} = req.body;
 
         //fetch file:
         const thumbnail = req.files.image;
 
         //validate the data:
-        if(!courseName || !courseDescription || whatYouWillLearn || !price || !tag || !thumbnail) {
+        if(!courseName || !courseDescription || whatYouWillLearn || !price ||  !category || !tag || !thumbnail) {
             return res.status(400).json({
                 success: false,
                 message: "Please enter all the required fields"
@@ -37,11 +37,11 @@ async function createCourse(req, res) {
         }
 
         //check given tag is valid or not
-        const checkTags = await Tag.findById(tag);
-        if(!checkTags){
+        const checkCategory = await Category.findById(category);
+        if(!checkCategory){
             return res.status(404).json({
                 success: false,
-                message: "Tag details not found"
+                message: "Category details not found"
             })
         }
 
@@ -57,7 +57,8 @@ async function createCourse(req, res) {
             instructor: instructorDetails._id,
             whatYouWillLearn,
             price,
-            tag: checkTags._id,
+            tag,
+            category: checkCategory._id,
             thumbnail: thumbnailImage.secure_url
         }
         const newCourse = await Course.create(courseData);
@@ -78,8 +79,8 @@ async function createCourse(req, res) {
         console.log("Course added in User model: ", courseUser);
 
         //update the tag schema
-        const courseTag = await Tag.findByIdAndUpdate(
-            {_id: checkTags._id},
+        const courseTag = await Category.findByIdAndUpdate(
+            {_id: checkCategory._id},
             {
                 $push: {
                     course: newCourse._id
