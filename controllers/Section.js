@@ -120,3 +120,6 @@ async function removeSection(req, res) {
         })
     }
 }
+
+
+module.exports = {createSection, updateSection, removeSection}
