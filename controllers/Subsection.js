@@ -119,3 +119,5 @@ async function removeSubsection(req, res) {
         })
     }
 }
+
+module.exports = {createSubsection, updateSubsection, removeSubsection};
