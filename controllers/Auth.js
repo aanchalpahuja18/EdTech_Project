@@ -148,7 +148,7 @@ async function signup(req, res) {
             gender: null,
             dateOfBirth: null,
             about: null,
-            profession: null
+            contactNumber: null
         })
         //create entry in DB
         const userData = {
