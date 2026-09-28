@@ -30,7 +30,6 @@ async function auth(req, res, next) {
             message: "Token is missing!"
         })
         }
-        next();
     } catch(err) {
         console.log("Error in auth middleware: ", err);
         return res.status(500).json({
