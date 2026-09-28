@@ -10,9 +10,9 @@ const profileSchema = mongoose.Schema({
     about: {
         type: String
     },
-    profession: {
-        type: String,
-        enum: ["Developer", "Student", "Professional", "Learner"]
+    contactNumber: {
+        type: Number,
+        trim: true
     }
 })
 
