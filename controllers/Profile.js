@@ -19,10 +19,20 @@ async function updateProfile(req, res) {
         }
 
         //find user:
-        const user = await User.find({_id: userId});
+        const user = await User.findById(userId);
 
         //find profile:
         const profileId = user.additionalDetails;
+
+        //TODO: check the below code in testing:
+        // const profileDetails = await Profile.findById(profileId);
+
+        // profileDetails.gender = gender;
+        // profileDetails.contactNumber = contactNumber;
+        // profileDetails.about = about;
+        // profileDetails.dateOfBirth = dateOfBirth;
+
+        // await profileDetails.save();
 
         //update profile:
         const updatedProfile = await Profile.findByIdAndUpdate({_id: profileId}, {
@@ -45,6 +55,74 @@ async function updateProfile(req, res) {
         return res.status(500).json({
             success: false,
             message: "Error while updating the profile"
+        })
+    }
+}
+
+
+//deleteAccount:
+async function deleteAccount(req, res) {
+    try{
+        //get user id
+        const userId = req.user.id;
+        //validation
+        const userDetails = await user.findById(userId);
+
+        if(!userDetails){
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            })
+        }
+        
+        //TODO - HW: unenroll user from all enrolled courses.
+
+        //TODO: find out how can we schedule the deletion of the account after 5 days
+
+        //TODO: what is a cron job?
+        //delete profile
+        await Profile.findByIdAndDelete({_id: userDetails.additionalDetails});
+        //delete user
+        await User.findByIdAndDelete({_id: userId});
+        //return response
+        return res.status(200).json({
+            success: true,
+            message: "Account deleted successfully!"
+        })
+    } catch(err){
+        return res.status(500).json({
+            success: false,
+            message: "Failed to delete your account, please try again later"
+        })
+    }
+}
+
+async function getUserDetails(req, res) {
+    try{
+        //get user id
+        const userId = req.user.id;
+
+        //get user details
+        const userDetails = await User.findById({_id: userId}).populate("additionalDetails").exec();
+
+        //validation
+        if(!userDetails){
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            })
+        }
+
+        //return res:
+        return res.status(200).json({
+            success: true,
+            message: "User details fetched successfully!"
+        })
+
+    } catch(err){
+        return res.status(500).json({
+            success: false,
+            message: "Failed to fetch the user details"
         })
     }
 }
