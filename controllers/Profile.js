@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const Profile = require("../models/Profile");
+const Course = require("../models/Course");
 
 
 //update profile:
@@ -76,6 +77,17 @@ async function deleteAccount(req, res) {
         }
         
         //TODO - HW: unenroll user from all enrolled courses.
+        if(req.user.accountType === "Student"){
+            //fetch courses in which user is enrolled:
+            const courses = userDetails.course;
+            for(let i=0;i<courses.length;i++){
+                await Course.findByIdAndUpdate({_id: courses._id}, {
+                    $pull: {
+                        studentsEnrolled: userId
+                    }
+                }, {new: true})
+            }
+        }
 
         //TODO: find out how can we schedule the deletion of the account after 5 days
 
