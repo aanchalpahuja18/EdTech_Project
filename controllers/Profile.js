@@ -126,3 +126,5 @@ async function getUserDetails(req, res) {
         })
     }
 }
+
+module.exports = {updateProfile, deleteAccount, getUserDetails};
