@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { getTestMessageUrl } = require("nodemailer");
 
 const courseSchema = mongoose.Schema({
     courseName: {
