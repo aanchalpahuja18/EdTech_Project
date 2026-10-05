@@ -132,4 +132,39 @@ async function getAllCourses(req, res){
     }   
 }
 
+
+async function getCourseDetail(req, res) {
+    try{
+        const {courseId} = req.body;
+
+        if(!courseId){
+            return res.status(400).json({
+                success: false,
+                message: "Please provide the course id"
+            })
+        }
+
+        const course = await Course.findById(courseId).populate().exec();
+
+        if(!course){
+            return res.status(404).json({
+                success: false,
+                message: "Course not found"
+            })
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Course details fetched successfully!",
+            course
+        })
+        
+    } catch(err){
+        console.log(err);
+        return res.status(500).json({
+            success: false,
+            message: "Error while fetching the course detail"
+        })
+    }
+}
 module.exports = {createCourse, getAllCourses}
