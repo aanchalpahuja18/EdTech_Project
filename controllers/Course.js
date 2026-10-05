@@ -167,4 +167,4 @@ async function getCourseDetail(req, res) {
         })
     }
 }
-module.exports = {createCourse, getAllCourses}
+module.exports = {createCourse, getAllCourses, getCourseDetail}
