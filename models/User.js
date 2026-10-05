@@ -45,7 +45,7 @@ const userSchema = mongoose.Schema({
     resetPasswordExpiryTime: {
         type: Date
     },
-    course: [
+    courses: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Course"
