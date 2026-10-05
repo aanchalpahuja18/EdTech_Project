@@ -135,8 +135,10 @@ async function getAllCourses(req, res){
 
 async function getCourseDetail(req, res) {
     try{
+        //fetch courseId from request body:
         const {courseId} = req.body;
 
+        //validate courseId:
         if(!courseId){
             return res.status(400).json({
                 success: false,
@@ -144,8 +146,10 @@ async function getCourseDetail(req, res) {
             })
         }
 
+        //fetch the course details from DB:
         const course = await Course.findById(courseId).populate().exec();
 
+        //check if course is found or not
         if(!course){
             return res.status(404).json({
                 success: false,
@@ -153,6 +157,7 @@ async function getCourseDetail(req, res) {
             })
         }
 
+        //return the response with course details:
         return res.status(200).json({
             success: true,
             message: "Course details fetched successfully!",
