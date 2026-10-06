@@ -111,4 +111,4 @@ async function categoryPageDetails(req, res) {
 }
 
 
-module.exports = {createCategory, getAllCategories};
+module.exports = {createCategory, getAllCategories, categoryPageDetails};
