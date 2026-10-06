@@ -132,8 +132,8 @@ async function getAllCourses(req, res){
     }   
 }
 
-
-async function getCourseDetail(req, res) {
+//getCourseDetail handler function:
+async function getCourseDetails(req, res) {
     try{
         //fetch courseId from request body:
         const {courseId} = req.body;
@@ -147,13 +147,34 @@ async function getCourseDetail(req, res) {
         }
 
         //fetch the course details from DB:
-        const course = await Course.findById(courseId).populate().exec();
+        const courseDetails = await Course.findById(courseId)
+        .populate({
+            path: "instructor",
+            populate: {
+                path: "additionalDetails",
+            },
+        })
+        .populate({
+            path: "courseContent",
+            populate: {
+               path: "SubSection"
+            }
+        })
+        .populate("ratingAndReview")
+        .populate("category")
+        .populate({
+            path: "studentsEnrolled",
+            populate: {
+                path: "additionalDetails"
+            }
+        })
+        .exec();
 
         //check if course is found or not
-        if(!course){
+        if(!courseDetails){
             return res.status(404).json({
                 success: false,
-                message: "Course not found"
+                message: `Course not found with ${courseId}`
             })
         }
 
@@ -161,7 +182,7 @@ async function getCourseDetail(req, res) {
         return res.status(200).json({
             success: true,
             message: "Course details fetched successfully!",
-            course
+            data: courseDetails
         })
         
     } catch(err){
@@ -172,4 +193,4 @@ async function getCourseDetail(req, res) {
         })
     }
 }
-module.exports = {createCourse, getAllCourses, getCourseDetail}
+module.exports = {createCourse, getAllCourses, getCourseDetails};
