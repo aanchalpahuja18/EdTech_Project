@@ -197,3 +197,5 @@ async function getCourseRatings(req, res) {
         })
     }
 }
+
+module.exports = {createRating, getAverageRating, getAllRatings, getCourseRatings}
