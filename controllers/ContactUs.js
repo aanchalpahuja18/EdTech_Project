@@ -39,3 +39,5 @@ async function contact(req, res) {
         })
     }
 }
+
+module.exports = {contact};
