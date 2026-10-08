@@ -31,7 +31,7 @@ async function resetPasswordToken(req, res) {
         console.log("Token value: ", token);
 
         //add token and expiry time inside the User model
-        const updatedDetails = await User.findOneByIdAndUpdate({email: email}, {
+        const updatedDetails = await User.findOneAndUpdate({email: email}, {
             token: token,
             resetPasswordExpiryTime: Date.now() + 5*60*1000
         }, {new: true});
@@ -46,7 +46,7 @@ async function resetPasswordToken(req, res) {
         //return response: 
         return res.status(200).json({
             success: true,
-            message: "Your password is reset successfully!"
+            message: "Email sent successfully, please check your inbox to reset the password!"
         })
     } catch(err){ 
         console.log(err);
