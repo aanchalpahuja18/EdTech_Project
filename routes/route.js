@@ -5,7 +5,7 @@ const router = express.Router();
 const {createCategory, getAllCategories, categoryPageDetails} = require("../controllers/Categories");
 const {contact} = require("../controllers/ContactUs");
 const {createCourse, getAllCourses, getCourseDetails} = require("../controllers/Course");
-const {updateProfile, deleteAccount, getUserDetails} = require("../controllers/Profile");
+const {updateProfile, deleteAccount, getUserDetails, updateProfileImage} = require("../controllers/Profile");
 const {createRating, getAverageRating, getAllRatings, getCourseRatings} = require("../controllers/RatingAndReview");
 const {createSection, updateSection, removeSection} = require("../controllers/Section");
 const {createSubsection, updateSubsection, removeSubsection} = require("../controllers/Subsection");
@@ -49,6 +49,7 @@ router.post("/get-course-details", getCourseDetails);
 router.put("/update-profile", auth, updateProfile);
 router.delete("/delete-account", auth, deleteAccount);
 router.get("/get-user-details", auth, getUserDetails);
+router.put("/update-profile-image", auth, updateProfileImage);
 
 //Rating and review route:
 router.post("/create-rating", auth, isStudent, createRating);

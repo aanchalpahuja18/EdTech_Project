@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const Profile = require("../models/Profile");
 const Course = require("../models/Course");
+const imageUploader = require("../utils/imageUploader");
 
 
 //update profile:
@@ -144,4 +145,55 @@ async function getUserDetails(req, res) {
     }
 }
 
-module.exports = {updateProfile, deleteAccount, getUserDetails};
+async function updateProfileImage(req, res) {
+    try{   
+        //fetch image:
+        const profileImage = req.files.image;
+        console.log("Profile image: ", profileImage);
+
+        //fetch user id:
+        const userId = req.user.id;
+        console.log("User id: ", userId);
+
+        //validate:
+        if(!profileImage){
+            return res.status(400).json({
+                success: false,
+                message: "Please attach the profile image"
+            })
+        }
+
+        //upload image to cloudinary:
+        const response = await imageUploader(profileImage, "EdTech/ProfileImages");
+        console.log("Profile image uploaded to cloudinary: ", response);
+
+        // check if user exists, yes then find the id and update the profile image:
+        const updatedProfile = await User.findByIdAndUpdate({_id: userId}, {
+            image: response.secure_url
+        }, {new: true});
+
+        console.log("Updated profile: ", updatedProfile);
+
+        if(!updatedProfile){
+            return res.status(500).json({
+                success: false,
+                message: "User is not registered with us, please signup to continue"
+            })
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Profile image updated successfully!",
+            data: updatedProfile
+        })
+ 
+    } catch(err) {
+        console.log(err);
+        return res.status(500).json({
+            success: false,
+            message: "Failure in updating the profile picture, please try again"
+        })
+    }
+}
+
+module.exports = {updateProfile, deleteAccount, getUserDetails, updateProfileImage};
