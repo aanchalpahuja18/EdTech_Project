@@ -13,7 +13,7 @@ require("dotenv").config();
 async function sendOTP(req, res) {
     try {
         //fetch email from req body
-        const email = req.body;
+        const {email} = req.body;
     
         if(!email){
             return res.status(500).json({
@@ -87,6 +87,8 @@ async function signup(req, res) {
         //data fetch from request body
         const {firstName, lastName, accountType, email, contactNo, password, confirmPassword, otp} = req.body;
 
+        console.log("Entered otp: ", otp);
+        console.log("Type of otp:", typeof(otp));
         //validate all the fields
         if(!firstName || !lastName || !email || !contactNo || !password || !confirmPassword || !otp) {
             return res.status(403).json({
@@ -104,7 +106,7 @@ async function signup(req, res) {
         }
 
         //check existing email
-        const emailExists = await User.findOne(email);
+        const emailExists = await User.findOne({email});
         if(emailExists) {
             return res.status(400).json({
                 success: false,
@@ -122,7 +124,7 @@ async function signup(req, res) {
                 success: false,
                 message: "OTP not found!"
             })
-        } else if(otp !== recentOtp.otp){
+        } else if(otp != recentOtp[0].otp){
             //Invalid OTP
             return res.status(400).json({
                 success: false,
@@ -135,7 +137,7 @@ async function signup(req, res) {
         //hash password
         let hashedPassword;
         try{
-            hashedPassword = await bcrypt.hash(confirmPassword, 10);
+            hashedPassword = await bcrypt.hash(password, 10);
         }
         catch(err){
             return res.status(5090).json({
@@ -201,7 +203,7 @@ async function login(req, res) {
         if(!user){
             return res.status(401).json({
                 success: false,
-                message: "Please register yourself!"
+                message: "User is not registered with us, Please signup to continue!"
             })
         }
 
@@ -209,7 +211,7 @@ async function login(req, res) {
 
         const jwtSecret = process.env.JWT_SECRET;
 
-        const checkPassword = await bcrypt.compare(user.password, password);
+        const checkPassword = await bcrypt.compare(password, user.password);
 
         if(checkPassword) {
             const tokenPayload = {
