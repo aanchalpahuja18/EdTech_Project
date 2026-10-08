@@ -84,7 +84,7 @@ async function updateSection(req, res) {
 async function removeSection(req, res) {
     try{
         //fetch data -> assuming that we are sending id in params:
-        const {sectionId, courseId} = req.params;
+        const {sectionId, courseId} = req.body;
     
         //validate the data:
         if(!sectionId || !courseId) {
@@ -109,7 +109,7 @@ async function removeSection(req, res) {
         //return res:
         return res.status(200).json({
             success: true,
-            message: "Section is updated successfully!"
+            message: "Section is deleted successfully!"
         })
 
     } catch(err){

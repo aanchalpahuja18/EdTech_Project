@@ -60,14 +60,18 @@ async function updateProfile(req, res) {
     }
 }
 
+//TODO: add a function to update the profile picture of the user:
+
 
 //deleteAccount:
 async function deleteAccount(req, res) {
     try{
         //get user id
         const userId = req.user.id;
+        console.log("User id: ", userId);
         //validation
-        const userDetails = await user.findById(userId);
+        const userDetails = await User.findById(userId);
+        console.log("User details: ", userDetails);
 
         if(!userDetails){
             return res.status(404).json({
@@ -79,9 +83,9 @@ async function deleteAccount(req, res) {
         //TODO - HW: unenroll user from all enrolled courses.
         if(req.user.accountType === "Student"){
             //fetch courses in which user is enrolled:
-            const courses = userDetails.course;
+            const courses = userDetails.courses;
             for(let i=0;i<courses.length;i++){
-                await Course.findByIdAndUpdate({_id: courses._id}, {
+                await Course.findByIdAndUpdate({_id: courses[i]._id}, {
                     $pull: {
                         studentsEnrolled: userId
                     }
@@ -128,7 +132,8 @@ async function getUserDetails(req, res) {
         //return res:
         return res.status(200).json({
             success: true,
-            message: "User details fetched successfully!"
+            message: "User details fetched successfully!",
+            data: userDetails
         })
 
     } catch(err){
