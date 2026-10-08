@@ -158,12 +158,12 @@ async function getCourseDetails(req, res) {
                 path: "additionalDetails",
             },
         })
-        // .populate({
-        //     path: "courseContent",
-        //     populate: {
-        //        path: "SubSection"
-        //     }
-        // })
+        .populate({
+            path: "courseContent",
+            populate: {
+               path: "subSection"
+            }
+        })
         //.populate("ratingAndReview")
         .populate("category")
         .populate({
