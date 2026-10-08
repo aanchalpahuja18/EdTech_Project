@@ -17,7 +17,7 @@ async function createCategory(req, res) {
         }
 
         //create an entry in DB:
-        const newCategory = await Category.create({name: name, description: description});
+        const newCategory = await Category.create({categoryName: name, description: description});
         console.log("New category created: ", newCategory);
 
 

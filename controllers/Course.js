@@ -13,10 +13,10 @@ async function createCourse(req, res) {
         const {courseName, courseDescription, whatYouWillLearn, price, category, tag} = req.body;
 
         //fetch file:
-        const thumbnail = req.files.image;
+        const thumbnail = req.files.thumbnailImage;
 
         //validate the data:
-        if(!courseName || !courseDescription || whatYouWillLearn || !price ||  !category || !tag || !thumbnail) {
+        if(!courseName || !courseDescription || !whatYouWillLearn || !price ||  !category || !tag || !thumbnail) {
             return res.status(400).json({
                 success: false,
                 message: "Please enter all the required fields"
@@ -46,7 +46,7 @@ async function createCourse(req, res) {
         }
 
         //upload image to cloudinary
-        const thumbnailImage = await uploadImageToCloudinary(thumbnail, process.env.FOLDER_NAME);
+        const response = await uploadImageToCloudinary(thumbnail, process.env.FOLDER_NAME);
         console.log("Image uploaded to cloudinary:", response);
 
 
@@ -56,10 +56,14 @@ async function createCourse(req, res) {
             courseDescription,
             instructor: instructorDetails._id,
             whatYouWillLearn,
+            courseContent: [],
+            ratingAndReview: [],
             price,
             tag,
             category: checkCategory._id,
-            thumbnail: thumbnailImage.secure_url
+            studentsEnrolled: [],
+            instructions: [],
+            thumbnail: response.secure_url
         }
         const newCourse = await Course.create(courseData);
         console.log("Course added in DB: ", newCourse)
@@ -101,7 +105,7 @@ async function createCourse(req, res) {
         return res.status(500).json({
             success: false,
             message: "Error in creating the course, please try again later",
-            error: error.message
+            error: err.message
         })
     }
 }
@@ -154,13 +158,13 @@ async function getCourseDetails(req, res) {
                 path: "additionalDetails",
             },
         })
-        .populate({
-            path: "courseContent",
-            populate: {
-               path: "SubSection"
-            }
-        })
-        .populate("ratingAndReview")
+        // .populate({
+        //     path: "courseContent",
+        //     populate: {
+        //        path: "SubSection"
+        //     }
+        // })
+        //.populate("ratingAndReview")
         .populate("category")
         .populate({
             path: "studentsEnrolled",
