@@ -1,4 +1,5 @@
 require("dotenv").config();
+const jwt = require("jsonwebtoken");
 
 //auth:
 
@@ -7,7 +8,7 @@ async function auth(req, res, next) {
         //fetch token: 
 
         const token = req.cookies.token || req.body.token || req.headers("Authorisation").replace("Bearer ", "");
-
+        console.log("Token fetched from the request: ", token);
         //validate the token:
         if(!token) {
             return res.status(403).json({
