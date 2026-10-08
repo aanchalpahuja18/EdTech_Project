@@ -9,6 +9,7 @@ const sectionSchema = mongoose.Schema({
         {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
+            default: [],
             ref: "SubSection"
         }
     ],
