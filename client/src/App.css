@@ -1,3 +1,7 @@
 html, body{
     overflow-x: hidden
 }
+
+.homepage_pg{
+    background: url("./assets/Images/bghome.svg");
+}
