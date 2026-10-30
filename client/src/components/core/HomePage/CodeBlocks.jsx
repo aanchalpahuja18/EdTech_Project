@@ -28,7 +28,7 @@ const CodeBlocks = ({position, heading, subheading, ctabtn1, ctabtn2, codeblock,
       </div>
 
       {/* section 2 */}
-      <div className={`flex h-fit py-4 w-full lg:w-117.5 bg-radial-[circle_150px_at_center] from-${bgGradient}`}>
+      <div  style={{ "--glow": bgGradient }} className={`flex h-fit py-4 w-full lg:w-117.5 bg-richblack-900 bg-[radial-gradient(ellipse_at_center,color-mix(in_srgb,var(--glow)_25%,transparent)_0%,transparent_70%)]`}>
         {/* BG gradient  */}
         <div className='text-center flex flex-col w-[10%] text-richblack-400 font-inter font-bold'>
             <p>1</p>
