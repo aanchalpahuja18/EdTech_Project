@@ -5,6 +5,8 @@ import HighlightText from '../components/core/HomePage/HighlightText'
 import CTAButton from '../components/core/HomePage/CTAButton'
 import Banner from "../assets/Images/banner.mp4"
 import CodeBlocks from '../components/core/HomePage/CodeBlocks'
+import TimelineSection from '../components/core/HomePage/TimelineSection'
+import LearningLanguageSection from '../components/core/HomePage/LearningLanguageSection'
 
 const Home = () => {
   return (
@@ -83,7 +85,48 @@ const Home = () => {
                 />
             </div>
         </div>
+
       {/* section 2  */}
+      <div className='bg-pure-greys-5 text-richblack-700'>
+        <div className='homepage_pg h-77.5'>
+            <div className='w-11/12 max-w-max-content flex flex-col items-center gap-5 mx-auto'>
+            <div className='h-37.5'></div>
+                <div className='flex gap-7 text-white'>
+
+                        <CTAButton active={true} linkTo={"/signup"}> 
+                            <div className='flex gap-2 items-center'>
+                                Explore Full Catalog
+                                <FaArrowRight/>
+                            </div>
+                        </CTAButton>    
+                    <CTAButton active={false} linkTo={"/signup"}> 
+                        Learn More
+                    </CTAButton>
+                </div>
+            </div>
+        </div>
+
+        <div className='mx-auto w-11/12 max-w-max-content flex flex-col items-center justify-between gap-5 mt-23.75'>
+            <div className='flex gap-5'>
+                <div className='text-4xl font-semibold w-[45%]'>
+                    Get the skills you need for a {" "}
+                    <HighlightText text={"job that is in demand."}/>
+                </div>
+                <div className='flex flex-col gap-10 w-[40%] items-start'>
+                    <div className='text-[16px]'>
+                        The modern StudyNotion is the dictates its own terms. Today, to be a competitive specialist requires more than professional skills.
+                    </div>
+                    <CTAButton active={true} linkTo={"/signup"}>
+                        Learn More
+                    </CTAButton>
+                </div>
+            </div>
+
+            <TimelineSection />
+
+            <LearningLanguageSection/>
+        </div>
+      </div>
 
 
 
