@@ -7,6 +7,8 @@ import Banner from "../assets/Images/banner.mp4"
 import CodeBlocks from '../components/core/HomePage/CodeBlocks'
 import TimelineSection from '../components/core/HomePage/TimelineSection'
 import LearningLanguageSection from '../components/core/HomePage/LearningLanguageSection'
+import InstructorSection from '../components/core/HomePage/InstructorSection'
+import ExploreMore from '../components/core/HomePage/ExploreMore'
 
 const Home = () => {
   return (
@@ -84,6 +86,8 @@ const Home = () => {
                 bgGradient={"#E7BC5B"}
                 />
             </div>
+
+            <ExploreMore />
         </div>
 
       {/* section 2  */}
@@ -131,6 +135,13 @@ const Home = () => {
 
 
       {/* section 3  */}
+      <div className='w-11/12 mx-auto max-w-max-content flex flex-col items-center justify-between gap-8 bg-richblack-900 text-white'>
+        <InstructorSection/>
+
+        <h2 className='text-4xl text-center font-semibold mt-10'>Review from other Learners</h2>
+
+        {/* <ReviewSlider /> */}
+      </div>
 
 
       {/* Footer  */}
