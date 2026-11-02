@@ -35,10 +35,10 @@ const ExploreMore = () => {
             }
         </div>
 
-        <div className='lg:h-37.5'></div>
+        <div className='lg:h-20'></div>
 
         {/* course cards  */}
-        <div className='absolute flex flex-row gap-10 justify-between items-center w-full'>
+        <div className='flex flex-row gap-10 justify-between items-center w-full'>
             {
                 courses.map((element, index) => {
                     return (
