@@ -35,7 +35,7 @@ const Navbar = ({btnText}) => {
             <IoCartOutline className='text-richblack-300 text-2xl'/>
         </div>
         <div className='text-medium text-richblack-300 border rounded-md p-2 border-richblack-700'>
-            <Link to={"/signup"}>{btnText}</Link>
+            <Link to={btnText === "Login" ? "/login" :"/signup"}>{btnText}</Link>
         </div>
       </div>
     </div>
