@@ -17,13 +17,13 @@ const Navbar = ({btnText}) => {
                 <Link to={"/"}>Home</Link>
             </li>
             <li className='text-yellow-100'>
-               <Link to={"/catalog"}>Catalog</Link> 
+               <Link to={"/"}>Catalog</Link> 
             </li>
             <li>
-                <Link to={"/about-us"}>About Us</Link>
+                <Link to={"/about"}>About Us</Link>
             </li>
             <li>
-                <Link to={"/contact-us"}>Contact Us</Link>
+                <Link to={"/contact"}>Contact Us</Link>
             </li>
         </ul>
       </div>
