@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Navbar from './Navbar'
 import LoginImage from "../assets/Images/login.webp"
+import Frame from "../assets/Images/frame.png"
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { Link } from 'react-router-dom';
 
@@ -74,8 +75,9 @@ const Login = () => {
             </form>
         </div>
         {/* right image part */}
-        <div className='w-[50%]'>
-            <img src={LoginImage} alt="login image"/>
+        <div className='w-[50%] relative'>
+            <img src={LoginImage} alt="login image" className='-top-70 absolute z-10' width="558px" height="504px"/>
+            <img src={Frame} alt="frame" className='absolute lg:-top-65 lg:right-47 lg:z-2' width="558px" height="504px" />
         </div>
       </div>
     </div>

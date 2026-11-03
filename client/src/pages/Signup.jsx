@@ -3,6 +3,8 @@ import Navbar from './Navbar'
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { Link } from 'react-router-dom';
 import SignupImage from "../assets/Images/signup.webp"
+import Frame from "../assets/Images/frame.png"
+
 
 
 const Signup = () => {
@@ -91,8 +93,9 @@ const Signup = () => {
             </form>
         </div>
         {/* right image part */}
-        <div className='w-[50%]'>
-            <img src={SignupImage} alt="signup image"/>
+        <div className='w-[50%] relative'>
+            <img src={SignupImage} alt="signup image" className='-top-70 absolute z-10' width="558px" height="504px"/>
+            <img src={Frame} alt="frame" className='absolute lg:-top-65 lg:right-47 lg:z-2' width="558px" height="504px" />
         </div>
       </div>
 
