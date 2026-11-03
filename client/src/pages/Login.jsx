@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import Navbar from './Navbar'
 import LoginImage from "../assets/Images/login.webp"
 import { MdOutlineRemoveRedEye } from "react-icons/md";
-import CTAButton from '../components/core/HomePage/CTAButton';
 import { Link } from 'react-router-dom';
 
 const Login = () => {
