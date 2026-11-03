@@ -68,9 +68,11 @@ const Login = () => {
                         </div>
                     </div>
                 </div>
-            </form>
 
-            <CTAButton active={true} linkTo={"/"}>Sign In</CTAButton>
+                <div className='flex flex-col mt-10'>
+                    <button type='submit' className={`text-center text-[15px] px-6 py-3 rounded-md font-bold bg-yellow-50 text-black hover:scale-95 transition-all duration-200 cursor-pointer`}>Submit</button>
+                </div>
+            </form>
         </div>
         {/* right image part */}
         <div className='w-[50%]'>
