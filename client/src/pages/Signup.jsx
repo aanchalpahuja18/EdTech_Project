@@ -35,9 +35,9 @@ const Signup = () => {
         }
   return (
     <div className='flex flex-col'>
-      <div>
+      {/* <div>
         <Navbar btnText = "Login"/>
-      </div>
+      </div> */}
       <div className='flex justify-between items-center text-white mt-8'>
         {/* left part  */}
         <div className='flex flex-col gap-6 p-8 mx-auto h-fit'>

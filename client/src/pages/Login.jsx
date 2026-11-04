@@ -34,9 +34,9 @@ const Login = () => {
     }
   return (
     <div className='flex flex-col'>
-      <div>
+      {/* <div>
         <Navbar btnText = "Signup"/>
-      </div>
+      </div> */}
       <div className='flex justify-between items-center text-white mt-16'>
         {/* left part  */}
         <div className='flex flex-col gap-8 p-8 mx-auto h-fit'>
